@@ -43,3 +43,19 @@ jobs:
       - run: terraform validate
         if: steps.exists.outputs.found == 'true'
         working-directory: infra/terraform
+  ai-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: exists
+        run: test -d services/ai && echo "found=true" >> "$GITHUB_OUTPUT" || echo "found=false" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        if: steps.exists.outputs.found == 'true'
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+        if: steps.exists.outputs.found == 'true'
+        working-directory: services/ai
+      - run: python -m pytest
+        if: steps.exists.outputs.found == 'true'
+        working-directory: services/ai
