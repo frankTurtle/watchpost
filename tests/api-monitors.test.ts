@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { GET as GET_monitors, POST as POST_monitors } from "@/app/api/monitors/route";
 import {
   DELETE as DELETE_monitor,

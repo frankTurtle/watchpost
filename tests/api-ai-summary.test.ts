@@ -11,11 +11,7 @@ describe("POST /api/ai/summary", () => {
   it("returns 503 when AI_SERVICE_URL is not configured", async () => {
     vi.stubEnv("AI_SERVICE_URL", "");
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    const response = await POST_ai_summary(request);
+    const response = await POST_ai_summary();
 
     expect(response.status).toBe(503);
     const data = await response.json();
@@ -32,11 +28,7 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    const response = await POST_ai_summary(request);
+    const response = await POST_ai_summary();
 
     expect(response.status).toBe(502);
     const data = await response.json();
@@ -52,11 +44,7 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    const response = await POST_ai_summary(request);
+    const response = await POST_ai_summary();
 
     expect(response.status).toBe(502);
     const data = await response.json();
@@ -79,11 +67,7 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    const response = await POST_ai_summary(request);
+    const response = await POST_ai_summary();
 
     expect(response.status).toBe(200);
     const data = await response.json();
@@ -102,11 +86,7 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    await POST_ai_summary(request);
+    await POST_ai_summary();
 
     expect(mockFetch).toHaveBeenCalledWith(
       "http://ai:8000/summarize",
@@ -147,11 +127,7 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    await POST_ai_summary(request);
+    await POST_ai_summary();
 
     expect(mockFetch).toHaveBeenCalled();
     const callArgs = mockFetch.mock.calls[0];
@@ -170,11 +146,7 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    await POST_ai_summary(request);
+    await POST_ai_summary();
 
     const url = mockFetch.mock.calls[0][0];
     expect(url).toContain("/summarize");
@@ -192,18 +164,14 @@ describe("POST /api/ai/summary", () => {
 
     vi.stubGlobal("fetch", mockFetch);
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    await POST_ai_summary(request);
+    await POST_ai_summary();
 
     expect(mockFetch).toHaveBeenCalled();
     const bodyString = mockFetch.mock.calls[0][1].body;
     const body = JSON.parse(bodyString);
 
     // Check if any monitor with 'unknown' status has been transformed to 'up'
-    body.monitors.forEach((m: any) => {
+    body.monitors.forEach((m: Record<string, unknown>) => {
       expect(m.status).not.toBe("unknown");
     });
   });
@@ -227,11 +195,7 @@ describe("POST /api/ai/summary", () => {
 
     const { POST: POST_summary } = await import("@/app/api/ai/summary/route");
 
-    const request = new Request("http://localhost/api/ai/summary", {
-      method: "POST",
-    });
-
-    const response = await POST_summary(request);
+    const response = await POST_summary();
 
     expect(response.status).toBe(400);
     const data = await response.json();

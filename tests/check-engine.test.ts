@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { checkMonitor, runChecksOnce } from "@/lib/checks/run";
 import { Monitor } from "@/lib/types";
 
@@ -139,6 +139,7 @@ describe("checkMonitor", () => {
       vi.stubGlobal("fetch", mockFetch);
 
       const monitorWithoutMethod = { id: "test", url: "https://example.com" };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await checkMonitor(monitorWithoutMethod as any);
 
       expect(mockFetch).toHaveBeenCalledWith(

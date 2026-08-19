@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { DataProvider } from "@/lib/data/provider";
-import { Monitor, NewMonitor, Check } from "@/lib/types";
+import { NewMonitor } from "@/lib/types";
 
 describe("demo provider", () => {
   let provider: DataProvider;
