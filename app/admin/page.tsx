@@ -1,6 +1,7 @@
 import { getDataProvider, isDemoMode } from "@/lib/data";
 import { MonitorTable } from "./monitor-table";
 import { AddMonitorForm } from "./add-monitor-form";
+import { RunChecksButton } from "./run-checks-button";
 
 export default async function AdminPage() {
   const provider = getDataProvider();
@@ -9,7 +10,10 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Admin</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Admin</h1>
+        <RunChecksButton />
+      </div>
 
       {demoMode && (
         <div className="alert alert-info">
