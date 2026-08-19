@@ -24,3 +24,22 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: exists
+        run: test -d infra/terraform && echo "found=true" >> "$GITHUB_OUTPUT" || echo "found=false" >> "$GITHUB_OUTPUT"
+      - uses: hashicorp/setup-terraform@v3
+        if: steps.exists.outputs.found == 'true'
+        with:
+          terraform_version: ~1.14
+      - run: terraform fmt -check -recursive
+        if: steps.exists.outputs.found == 'true'
+        working-directory: infra/terraform
+      - run: terraform init -backend=false
+        if: steps.exists.outputs.found == 'true'
+        working-directory: infra/terraform
+      - run: terraform validate
+        if: steps.exists.outputs.found == 'true'
+        working-directory: infra/terraform
