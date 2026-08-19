@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test:coverage
+      - run: npm run build
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: exists
+        run: test -d infra/terraform && echo "found=true" >> "$GITHUB_OUTPUT" || echo "found=false" >> "$GITHUB_OUTPUT"
+      - uses: hashicorp/setup-terraform@v3
+        if: steps.exists.outputs.found == 'true'
+        with:
+          terraform_version: ~1.14
+      - run: terraform fmt -check -recursive
+        if: steps.exists.outputs.found == 'true'
+        working-directory: infra/terraform
+      - run: terraform init -backend=false
+        if: steps.exists.outputs.found == 'true'
+        working-directory: infra/terraform
+      - run: terraform validate
+        if: steps.exists.outputs.found == 'true'
+        working-directory: infra/terraform
+  ai-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: exists
+        run: test -d services/ai && echo "found=true" >> "$GITHUB_OUTPUT" || echo "found=false" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        if: steps.exists.outputs.found == 'true'
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+        if: steps.exists.outputs.found == 'true'
+        working-directory: services/ai
+      - run: python -m pytest
+        if: steps.exists.outputs.found == 'true'
+        working-directory: services/ai
