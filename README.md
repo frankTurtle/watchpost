@@ -11,10 +11,10 @@ Watchpost is a lightweight, open-source uptime monitor and status page system. D
 ## Features
 
 - **Public status page** — 24-hour uptime bars per monitor, real-time overall state
-- **Admin dashboard** — create, edit, and pause monitors; view recent check history
+- **Admin dashboard** — create, pause, and delete monitors; trigger check runs
 - **Flexible checking** — on-demand checks from the dashboard, or scheduled via AWS Lambda on a 5-minute interval (configurable)
 - **Basic auth** — optional admin password protection
-- **AI status summaries** — Claude writes plain-English summaries of monitor health, auto-refreshing on the status page
+- **AI status summaries** — one click and Claude writes a plain-English summary of monitor health on the status page
 - **Demo mode** — zero configuration: `npm run dev` and go; seeded with 3 monitors and 24 hours of synthetic check data
 - **Optional Supabase backend** — swap the in-memory demo for a persistent Postgres database
 
@@ -135,7 +135,7 @@ terraform plan
 terraform apply
 ```
 
-Terraform provisioned the Lambda function, EventBridge rule, and CloudWatch logs. The checker is ~free under the AWS free tier (128 MB memory, ~8,640 invocations/month). Monitor logs in CloudWatch or via the AWS CLI:
+Terraform provisions the Lambda function, EventBridge rule, and CloudWatch logs. The checker is ~free under the AWS free tier (128 MB memory, ~8,640 invocations/month). Monitor logs in CloudWatch or via the AWS CLI:
 
 ```bash
 aws logs tail /aws/lambda/watchpost-checker --follow
@@ -179,7 +179,7 @@ Coverage gates run automatically in CI (`.github/workflows/ci.yml`), so a green 
 Watchpost is a demonstration of **AI-assisted engineering workflow**. The project was pair-built by a human and Claude using Claude Code (Anthropic's official CLI), with a team of specialized AI coding agents, one feature branch per agent.
 
 The development process follows:
-- **GitFlow branching model** — feature branches off `develop`, release branches off `main`
+- **GitFlow branching model** — feature branches off `develop`, merged by PR; a release branch cut from `develop` lands on `main` with a version tag
 - **Conventional commits** — every commit is prefixed with type (`feat`, `fix`, `docs`, `test`, `ci`, `chore`) and co-authored with `Co-Authored-By: Claude`
 - **Code review** — each feature branch is merged via pull request with CI gates (lint, build, test, coverage)
 
