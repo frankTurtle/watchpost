@@ -12,6 +12,7 @@ export default defineConfig({
       exclude: [
         "**/*.d.ts",
         "**/proxy.ts", // Excluded per requirements
+        "**/supabase.ts", // Requires external DB credentials
       ],
       reporter: ["text", "text-summary"],
       thresholds: {
