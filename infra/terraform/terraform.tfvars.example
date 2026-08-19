@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and fill in with your actual values.
+# terraform.tfvars is gitignored and should never be committed.
+
+aws_region                = "us-east-1"
+supabase_url              = "https://your-project.supabase.co"
+supabase_service_role_key = "your-service-role-key-here"
+schedule_expression       = "rate(5 minutes)"
+function_name             = "watchpost-checker"
+log_retention_days        = 14
