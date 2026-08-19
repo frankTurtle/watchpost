@@ -1,6 +1,7 @@
 import { getDataProvider, isDemoMode } from "@/lib/data";
 import { summarizeMonitor, overallStatus } from "@/lib/status";
 import { UptimeBar } from "./components/uptime-bar";
+import { AiSummary } from "./components/ai-summary";
 
 export const revalidate = 60;
 
@@ -54,6 +55,9 @@ export default async function Home() {
           </div>
         </div>
       )}
+
+      {/* AI Summary */}
+      <AiSummary />
 
       {/* Monitor Cards */}
       {summaries.length > 0 && (
